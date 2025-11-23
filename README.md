@@ -17,6 +17,7 @@ This repository contains the implementation and analysis for Assignment 2, which
 
 - `HW2_RAG.ipynb` - Main Jupyter notebook with implementation
 - `Section A.md` - Complete analysis and answers for Part A
+- `Section B.md` - Complete analysis and answers for Part B
 - `rag_hw02_partA_results.xlsx` - Query results for Part A (5 queries with k=5)
 - `rag_hw02_submission_template.xlsx` - Submission template
 - `rag-requirements-1.txt` - Python package dependencies
@@ -59,6 +60,57 @@ pip install -r rag-requirements-1.txt
 | Query 5: Where pets allowed | ⚠️ Partially Successful | Retrieved some location information but incomplete |
 
 - Complete analysis and answers are documented in `Section A.md`
+
+## Section B: Experimenting with Vector Store Embeddings & Query Parameters
+
+### B.I. Rationale for Selected Query
+
+**Chosen query:** "What are CMU's quiet hours?"
+
+Selected for three main reasons:
+1. **Well-defined but fragmented concept** - Tests retrieval of information scattered across multiple sections
+2. **Clear, domain-specific terminology** - Uses specific terms that make relevance evaluation straightforward
+3. **Useful for comparing designs** - Provides meaningful basis for comparing chunking strategies and k parameter values
+
+- Complete analysis and answers are documented in `Section B.md`
+
+### B.IV. Analysis of k Parameters for B.1 (Sentence-Level Chunking)
+
+**Best k parameter:** k = 5
+
+**Key Findings:**
+- k = 1: Top result was unrelated (mid-semester grades)
+- k = 3: One relevant sentence retrieved, but incomplete
+- k = 5: Best balance - retrieved both quiet hours definition and enforcement details
+- k = 10: Introduced noise (accommodations, consent policies, etc.)
+
+**Why k = 5 is best:** Balances relevance and noise, capturing multiple relevant sentences without overwhelming unrelated content.
+
+**Improvement Recommendations:**
+1. Hybrid retrieval (semantic + keyword filtering)
+2. Better chunking (paragraph-level or overlapping windows)
+3. Query reformulation with synonyms
+4. Second-stage re-ranking
+
+- Complete analysis and answers are documented in `Section B.md`
+
+### B.V. Analysis of k Parameters for B.2 (Fixed-Size 200-Character Chunking)
+
+**Best k parameter:** k = 1
+
+**Key Findings:**
+- k = 1: Top result already contains highly relevant information about quiet hours and 24-hour policy
+- k = 3, 5, 10: Additional chunks introduce noise (privacy policies, grading tables, sanctions, etc.)
+
+**Why k = 1 is best:** Fixed-size chunks are dense and self-contained. The top-1 chunk already answers the query, while increasing k causes topic drift.
+
+**Improvement Recommendations:**
+1. Use semantic units for chunking (paragraph-level or sentence windows)
+2. Introduce overlap in fixed-size chunks
+3. Apply keyword-based post-filtering
+4. Adapt k to chunk size (smaller k for longer chunks)
+
+- Complete analysis and answers are documented in `Section B.md`
 
 ## Technologies Used
 
